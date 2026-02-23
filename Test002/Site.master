@@ -1,0 +1,81 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="Site.master.cs" Inherits="Site" %>
+<!DOCTYPE html>
+<html>
+<head runat="server">
+    <title>Product Management System</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <asp:ContentPlaceHolder id="head" runat="server"></asp:ContentPlaceHolder>
+
+    <style>
+      
+        .brand {
+            font-size: 1.2rem; 
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 40px;
+            background: linear-gradient(to right, #fff, #a5a5a5);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        body { font-family: 'Poppins', sans-serif; background-color: #f0f2f5; display: flex; height: 100vh; overflow: hidden; margin: 0; }
+        .sidebar { width: 280px; background: linear-gradient(145deg, #1e1e2f 0%, #16213e 100%); color: #fff; display: flex; flex-direction: column; box-shadow: 5px 0 25px rgba(0,0,0,0.1); z-index: 100; padding: 20px; }
+        .nav-link { color: rgba(255, 255, 255, 0.7); padding: 14px 20px; margin-bottom: 8px; border-radius: 12px; transition: all 0.3s ease; text-decoration: none; display: flex; align-items: center; }
+        .nav-link:hover { background: rgba(255, 255, 255, 0.1); transform: translateX(5px); color: white; }
+        .nav-link.active { background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%); box-shadow: 0 4px 15px rgba(79, 172, 254, 0.4); color: white; }
+        .main-content { flex-grow: 1; overflow-y: auto; padding: 40px; background-image: radial-gradient(#d1d5db 1px, transparent 1px); background-size: 24px 24px; }
+        .glass-card { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.6); border-radius: 20px; box-shadow: 0 8px 32px rgba(0,0,0,0.05); transition: transform 0.3s ease; }
+        .glass-card:hover { transform: translateY(-5px); }
+        .btn-gradient { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none; color: white; padding: 10px 25px; border-radius: 50px; font-weight: 500; transition: all 0.3s; }
+        .btn-gradient:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(118, 75, 162, 0.4); color: white; }
+        .modern-table { border-collapse: separate; border-spacing: 0 10px; width: 100%; }
+        .modern-table thead th { border: none; color: #6c757d; font-weight: 600; text-transform: uppercase; font-size: 0.85rem; padding: 15px; }
+        .modern-table tbody tr { background: white; box-shadow: 0 2px 10px rgba(0,0,0,0.02); transition: transform 0.2s; }
+        .modern-table tbody tr:hover { transform: scale(1.01); box-shadow: 0 5px 15px rgba(0,0,0,0.08); z-index: 10; position: relative; }
+        .modern-table td { border: none; padding: 20px; vertical-align: middle; background: white; }
+        .modern-table td:first-child { border-radius: 15px 0 0 15px; }
+        .modern-table td:last-child { border-radius: 0 15px 15px 0; }
+        .form-control { border-radius: 12px; padding: 12px; border: 2px solid #eef0f3; background: #fdfdfd; }
+        .form-control:focus { border-color: #667eea; box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1); }
+    </style>
+</head>
+<body>
+    <form id="form1" runat="server" style="display:flex; width:100%;">
+        <asp:ScriptManager runat="server" />
+        <div class="sidebar">
+            <div class="brand"><i class="fas fa-tasks me-2"></i> Product Mgmt</div>
+            
+            <asp:HyperLink ID="lnkDashboard" runat="server" NavigateUrl="~/Dashboard.aspx" CssClass="nav-link">
+                <i class="fas fa-chart-pie me-3"></i>Dashboard
+            </asp:HyperLink>
+            <asp:HyperLink ID="lnkInventory" runat="server" NavigateUrl="~/ViewProducts.aspx" CssClass="nav-link">
+                <i class="fas fa-box-open me-3"></i>Inventory
+            </asp:HyperLink>
+            <asp:HyperLink ID="lnkPurchases" runat="server" NavigateUrl="~/Purchases.aspx" CssClass="nav-link">
+                <i class="fas fa-shopping-bag me-3"></i>Purchases
+            </asp:HyperLink>
+            
+            <asp:HyperLink ID="lnkSales" runat="server" NavigateUrl="~/Sales.aspx" CssClass="nav-link">
+                <i class="fas fa-shopping-cart me-3"></i>Sales
+            </asp:HyperLink>
+
+            <asp:HyperLink ID="lnkAddProduct" runat="server" NavigateUrl="~/AddProduct.aspx" CssClass="nav-link">
+                <i class="fas fa-plus-circle me-3"></i>Add Product
+            </asp:HyperLink>
+            <asp:HyperLink ID="lnkRegister" runat="server" NavigateUrl="~/Account/Register.aspx" CssClass="nav-link">
+                <i class="fas fa-user-plus me-3"></i>New User
+            </asp:HyperLink>
+
+            <asp:LinkButton ID="lnkLogout" runat="server" OnClick="lnkLogout_Click" CssClass="nav-link text-danger mt-auto">
+                <i class="fas fa-power-off me-3"></i>Logout
+            </asp:LinkButton>
+        </div>
+        <div class="main-content">
+            <asp:ContentPlaceHolder id="ContentPlaceHolder1" runat="server"></asp:ContentPlaceHolder>
+        </div>
+    </form>
+</body>
+</html>
