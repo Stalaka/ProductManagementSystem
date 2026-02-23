@@ -22,7 +22,8 @@ public partial class Register : System.Web.UI.Page
             string query = "INSERT INTO Users (Username, Password, Role) VALUES (@user, @pass, @role)";
             SqlCommand cmd = new SqlCommand(query, con);
             cmd.Parameters.AddWithValue("@user", txtUsername.Text.Trim());
-            cmd.Parameters.AddWithValue("@pass", txtPassword.Text.Trim());
+            string hashedPassword = PasswordHasher.HashPassword(txtPassword.Text.Trim());
+                        cmd.Parameters.AddWithValue("@pass", hashedPassword);
             cmd.Parameters.AddWithValue("@role", ddlRole.SelectedValue);
 
             try
