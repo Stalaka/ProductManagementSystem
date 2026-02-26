@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Configuration;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using System.Web.Http;
 
 public class SaleUpdateDto
@@ -10,7 +11,6 @@ public class SaleUpdateDto
     public string CustomerName { get; set; }
 }
 
-// UPGRADED: The ID is now safely inside the JSON box!
 public class RefundRequestDto
 {
     public int SaleId { get; set; }
@@ -67,6 +67,8 @@ public class SalesController : ApiController
         }
         catch (Exception ex)
         {
+            // UPGRADED: Using Debug.WriteLine
+            System.Diagnostics.Debug.WriteLine("Edit Error: " + ex.Message);
             return Content(System.Net.HttpStatusCode.InternalServerError, ex.Message);
         }
     }
@@ -78,7 +80,6 @@ public class SalesController : ApiController
     {
         try
         {
-            // Safely grab the ID directly from the JSON payload!
             if (data == null) return BadRequest("Invalid request payload.");
             int id = data.SaleId;
 
@@ -123,6 +124,8 @@ public class SalesController : ApiController
         }
         catch (Exception ex)
         {
+            // UPGRADED: Using Debug.WriteLine
+            System.Diagnostics.Debug.WriteLine("Refund Error: " + ex.Message);
             return Content(System.Net.HttpStatusCode.InternalServerError, ex.Message);
         }
     }
@@ -173,6 +176,8 @@ public class SalesController : ApiController
         }
         catch (Exception ex)
         {
+            // UPGRADED: Using Debug.WriteLine
+            System.Diagnostics.Debug.WriteLine("Delete Error: " + ex.Message);
             return Content(System.Net.HttpStatusCode.InternalServerError, ex.Message);
         }
     }

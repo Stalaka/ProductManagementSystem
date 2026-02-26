@@ -2,6 +2,7 @@
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
@@ -39,8 +40,8 @@ public partial class Sales : System.Web.UI.Page
     {
         using (SqlConnection con = new SqlConnection(cs))
         {
-            // UPDATED: Now grabs Rating and CustomerReview for the star ratings!
-            string query = "SELECT s.SaleId, pr.ProductName, s.Quantity, s.UnitPrice, s.TotalAmount, s.CustomerName, s.SaleDate, s.Status, s.CustomerFeedback, s.Rating, s.CustomerReview " +
+            
+            string query = "SELECT s.SaleId, pr.ProductName, s.Quantity, s.UnitPrice, s.TotalAmount, s.CustomerName, s.SaleDate, s.Status, s.CustomerFeedback, s.Rating, s.CustomerReview, s.CreatedBy " +
                            "FROM Sales s " +
                            "INNER JOIN Products pr ON s.ProductId = pr.ProductId " +
                            "ORDER BY s.SaleDate DESC";
@@ -66,6 +67,9 @@ public partial class Sales : System.Web.UI.Page
             decimal price = Convert.ToDecimal(txtPrice.Text);
             string customer = txtCustomer.Text.Trim();
 
+            
+            string loggedInUser = Session["username"] != null ? Session["username"].ToString() : "Unknown User";
+
             using (SqlConnection con = new SqlConnection(cs))
             {
                 con.Open();
@@ -77,14 +81,15 @@ public partial class Sales : System.Web.UI.Page
 
                 if (qtyToSell > currentStock) throw new Exception("Not enough stock! You only have " + currentStock + " left in inventory.");
 
-                // Set status to 'Completed' on new sales
-                string query = "INSERT INTO Sales (ProductId, Quantity, UnitPrice, CustomerName, SaleDate, Status) " +
-                               "VALUES (@pid, @qty, @price, @cust, GETDATE(), 'Completed')";
+               
+                string query = "INSERT INTO Sales (ProductId, Quantity, UnitPrice, CustomerName, SaleDate, Status, CreatedBy) " +
+                               "VALUES (@pid, @qty, @price, @cust, GETDATE(), 'Completed', @createdBy)";
                 SqlCommand cmd = new SqlCommand(query, con);
                 cmd.Parameters.AddWithValue("@pid", productId);
                 cmd.Parameters.AddWithValue("@qty", qtyToSell);
                 cmd.Parameters.AddWithValue("@price", price);
                 cmd.Parameters.AddWithValue("@cust", customer);
+                cmd.Parameters.AddWithValue("@createdBy", loggedInUser);
                 cmd.ExecuteNonQuery();
             }
 
@@ -98,6 +103,8 @@ public partial class Sales : System.Web.UI.Page
         }
         catch (Exception ex)
         {
+            
+            System.Diagnostics.Debug.WriteLine("Save Error: " + ex.Message);
             string cleanMsg = ex.Message.Replace("'", "").Replace("\r", "").Replace("\n", " ");
             ClientScript.RegisterStartupScript(this.GetType(), "Error", "$('#saleModal').modal('hide'); showToast('Error: " + cleanMsg + "', false);", true);
         }

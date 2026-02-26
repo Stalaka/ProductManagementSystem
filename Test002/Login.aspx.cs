@@ -17,7 +17,7 @@ public partial class Login : System.Web.UI.Page
         using (SqlConnection con = new SqlConnection(cs))
         {
 
-            string query = "SELECT Password, Role FROM Users WHERE Username=@user";
+            string query = "SELECT UserId, Password, Role FROM Users WHERE Username=@user";
             SqlCommand cmd = new SqlCommand(query, con);
             cmd.Parameters.AddWithValue("@user", txtUsername.Text.Trim());
 
@@ -29,7 +29,9 @@ public partial class Login : System.Web.UI.Page
                 {
                     if (rdr.Read())
                     {
+                        int userId = Convert.ToInt32(rdr["UserId"]);
                         string storedPassword = rdr["Password"].ToString();
+
                         string userrole = rdr["Role"].ToString();
 
                         if (!PasswordHasher.VerifyPassword(txtPassword.Text.Trim(), storedPassword))
@@ -51,7 +53,7 @@ public partial class Login : System.Web.UI.Page
                         Session["role"] = userrole;
 
                         Response.Redirect("~/Dashboard.aspx");
-                            }
+                    }
                     else
                         lblMessage.Text = "Invalid username or password.";
                 }
@@ -73,7 +75,10 @@ public partial class Login : System.Web.UI.Page
             string query = "UPDATE Users SET Password=@pass WHERE Username=@user";
             SqlCommand cmd = new SqlCommand(query, con);
             cmd.Parameters.AddWithValue("@pass", hashedPassword);
+
+            
             cmd.Parameters.AddWithValue("@user", username);
+
             cmd.ExecuteNonQuery();
         }
     }

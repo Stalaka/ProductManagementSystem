@@ -54,6 +54,17 @@
 
                 <asp:BoundField DataField="CustomerName" HeaderText="CUSTOMER" ItemStyle-CssClass="text-muted small" />
                 
+                <asp:TemplateField HeaderText="RECORDED BY">
+                    <ItemTemplate>
+                        <div class="fw-bold text-dark small">
+                            <i class="fas fa-user-circle text-primary me-1"></i> <%# Eval("CreatedBy") %>
+                        </div>
+                        <div class="text-muted" style="font-size: 0.75rem;">
+                            <i class="fas fa-clock me-1"></i> <%# Eval("SaleDate", "{0:dd MMM yyyy}") %>
+                        </div>
+                    </ItemTemplate>
+                </asp:TemplateField>
+
                 <asp:TemplateField HeaderText="STATUS & REVIEW">
                     <ItemTemplate>
                         <asp:PlaceHolder runat="server" Visible='<%# Eval("Status").ToString() == "Completed" %>'>
@@ -156,7 +167,7 @@
                     </div>
                 </div>
                 <div class="modal-footer border-0 pt-0 px-4 pb-4">
-                    <asp:Button ID="btnSave" runat="server" Text="Confirm Sale" CssClass="btn btn-success w-100 rounded-pill py-2 shadow" OnClick="btnSave_Click" />
+                    <asp:Button ID="btnSave" runat="server" Text="Confirm Sale" CssClass="btn btn-success w-100 rounded-pill py-2 shadow" OnClick="btnSave_Click" OnClientClick="this.value='Recording...'; this.style.pointerEvents='none'; this.style.opacity='0.7';" UseSubmitBehavior="false" />
                 </div>
             </div>
         </div>
@@ -300,7 +311,6 @@
             });
         }
 
-        // --- UPGRADED: ID is now inside the JSON body! ---
         function openRefundSale(id) {
             Swal.fire({
                 title: 'Process Refund?',
