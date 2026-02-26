@@ -54,7 +54,7 @@
 
                 <asp:BoundField DataField="CustomerName" HeaderText="CUSTOMER" ItemStyle-CssClass="text-muted small" />
                 
-                <asp:TemplateField HeaderText="RECORDED BY">
+                <asp:TemplateField HeaderText="ADDED BY">
                     <ItemTemplate>
                         <div class="fw-bold text-dark small">
                             <i class="fas fa-user-circle text-primary me-1"></i> <%# Eval("CreatedBy") %>

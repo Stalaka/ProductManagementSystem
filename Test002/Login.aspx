@@ -60,7 +60,7 @@
             border: none;
             border-radius: 10px;
             padding: 15px;
-            padding-left: 45px; /* Space for icon */
+            padding-left: 45px; 
             font-size: 0.95rem;
             transition: all 0.3s;
         }
